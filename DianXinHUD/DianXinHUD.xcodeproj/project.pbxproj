@@ -14,8 +14,8 @@
 		683041A81C8D5E77002BC1AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 683041A61C8D5E77002BC1AE /* LaunchScreen.storyboard */; };
 		683041B31C8D5E78002BC1AE /* DianXinHUDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683041B21C8D5E78002BC1AE /* DianXinHUDTests.swift */; };
 		683041BE1C8D5E78002BC1AE /* DianXinHUDUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683041BD1C8D5E78002BC1AE /* DianXinHUDUITests.swift */; };
-		683041CC1C8D6099002BC1AE /* DXHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683041CB1C8D6099002BC1AE /* DXHUD.swift */; };
-		683041CE1C8D64D7002BC1AE /* DXHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = 683041CD1C8D64D7002BC1AE /* DXHUD.xib */; };
+		68C1C0561C8ED0990087F73C /* DXHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C1C0531C8ED0990087F73C /* DXHUD.swift */; };
+		68C1C0571C8ED0990087F73C /* DXHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68C1C0541C8ED0990087F73C /* DXHUD.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,8 +49,8 @@
 		683041B91C8D5E78002BC1AE /* DianXinHUDUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DianXinHUDUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		683041BD1C8D5E78002BC1AE /* DianXinHUDUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DianXinHUDUITests.swift; sourceTree = "<group>"; };
 		683041BF1C8D5E78002BC1AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		683041CB1C8D6099002BC1AE /* DXHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXHUD.swift; sourceTree = "<group>"; };
-		683041CD1C8D64D7002BC1AE /* DXHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DXHUD.xib; sourceTree = "<group>"; };
+		68C1C0531C8ED0990087F73C /* DXHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DXHUD.swift; sourceTree = "<group>"; };
+		68C1C0541C8ED0990087F73C /* DXHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DXHUD.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +101,7 @@
 		6830419C1C8D5E77002BC1AE /* DianXinHUD */ = {
 			isa = PBXGroup;
 			children = (
-				683041CB1C8D6099002BC1AE /* DXHUD.swift */,
-				683041CD1C8D64D7002BC1AE /* DXHUD.xib */,
+				68C1C0521C8ED0990087F73C /* DXHud */,
 				6830419D1C8D5E77002BC1AE /* AppDelegate.swift */,
 				6830419F1C8D5E77002BC1AE /* ViewController.swift */,
 				683041A11C8D5E77002BC1AE /* Main.storyboard */,
@@ -129,6 +128,15 @@
 				683041BF1C8D5E78002BC1AE /* Info.plist */,
 			);
 			path = DianXinHUDUITests;
+			sourceTree = "<group>";
+		};
+		68C1C0521C8ED0990087F73C /* DXHud */ = {
+			isa = PBXGroup;
+			children = (
+				68C1C0531C8ED0990087F73C /* DXHUD.swift */,
+				68C1C0541C8ED0990087F73C /* DXHUD.xib */,
+			);
+			path = DXHud;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,10 +243,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68C1C0571C8ED0990087F73C /* DXHUD.xib in Resources */,
 				683041A81C8D5E77002BC1AE /* LaunchScreen.storyboard in Resources */,
 				683041A51C8D5E77002BC1AE /* Assets.xcassets in Resources */,
 				683041A31C8D5E77002BC1AE /* Main.storyboard in Resources */,
-				683041CE1C8D64D7002BC1AE /* DXHUD.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				683041A01C8D5E77002BC1AE /* ViewController.swift in Sources */,
-				683041CC1C8D6099002BC1AE /* DXHUD.swift in Sources */,
+				68C1C0561C8ED0990087F73C /* DXHUD.swift in Sources */,
 				6830419E1C8D5E77002BC1AE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
