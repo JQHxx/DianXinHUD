@@ -9,6 +9,7 @@
 import UIKit
 
 var DXHUDArray = [DXHUD]()
+let DXScreenSize = UIScreen.mainScreen().bounds.size
 
 class DXHUD: UIView {
     
@@ -25,7 +26,10 @@ class DXHUD: UIView {
     
     var hudFlag:String = "DefaultFlag"
     lazy var arcLayer = CAShapeLayer()
-    var arcColor: UIColor = UIColor.orangeColor() {
+    var bgMaskView:UIView?
+    
+    //圆弧的颜色
+    var arcColor: UIColor = UIColor.orangeColor(){
     
         willSet(newColor){
             
@@ -57,9 +61,14 @@ class DXHUD: UIView {
     //MARK: 开始动画
     func beginAnimation()
     {
+        //FIXME: 显示hud的时候应该加个合适的过渡动画
+//        UIView.animateWithDuration(hiddenHudAnimationTime, animations: { () -> Void in
+//            
+//                self.alpha = 1.0
+//        })
         let rotaionAnimation = CABasicAnimation.init(keyPath: "transform")
         rotaionAnimation.toValue = NSValue.init(CATransform3D: CATransform3DMakeRotation(CGFloat(M_PI - 1), 0, 0, 1))
-        rotaionAnimation.duration = animationTime
+        rotaionAnimation.duration = self.animationTime
         rotaionAnimation.repeatCount = MAXFLOAT
         rotaionAnimation.cumulative = true
         self.frontView.layer.addAnimation(rotaionAnimation, forKey: self.hudFlag)
@@ -77,6 +86,10 @@ class DXHUD: UIView {
                 if finish == true
                 {
                     self.frontView.layer.removeAnimationForKey(self.hudFlag)
+                    if self.bgMaskView != nil
+                    {
+                        self.bgMaskView!.removeFromSuperview()
+                    }
                     self.removeFromSuperview()
                     if let index = DXHUDArray.indexOf(self)
                     {
@@ -92,8 +105,21 @@ class DXHUD: UIView {
         self.endAnimation()
     }
     
+    //MARK: 设置hud的样式
+    func setUpHud(remindTitle title:String, flag:String, confi:((hud: DXHUD) -> ())?)
+    {
+        //self.alpha = 0.0
+        self.hudFlag = flag
+        self.desLabel.text = title
+        if let setHudblock = confi
+        {
+            setHudblock(hud: self)
+        }
+        DXHUDArray.append(self)
+    }
+    
     /**
-     显示hud
+     在给定view里显示hud
      
      - parameter title:  提示语
      - parameter flag:   hud标记
@@ -103,17 +129,26 @@ class DXHUD: UIView {
     class func showHud(remindTitle title: String, flag:String, inView:UIView, confi:((hud: DXHUD) -> ())?)
     {
         let hud = self.dxHud()
-        hud.hudFlag = flag
-        hud.desLabel.text = title
-        if let setHudblock = confi
-        {
-            setHudblock(hud: hud)
-        }
-        DXHUDArray.append(hud)
-        let screenSize = UIScreen.mainScreen().bounds.size
-        hud.center = CGPointMake(screenSize.width / 2, screenSize.height / 2)
+        hud.setUpHud(remindTitle: title, flag: flag, confi: confi)
+        hud.center = CGPointMake(DXScreenSize.width / 2, DXScreenSize.height / 2)
         inView.addSubview(hud)
         hud.beginAnimation()
+    }
+    
+    class func showHud(remindTitle title: String, flag:String, confi:((hud: DXHUD) -> ())?)
+    {
+        let hud = self.dxHud()
+        hud.setUpHud(remindTitle: title, flag: flag, confi: confi)
+        hud.center = CGPointMake(DXScreenSize.width / 2, DXScreenSize.height / 2)
+        if let keyWindow = UIApplication.sharedApplication().keyWindow
+        {
+            hud.bgMaskView = UIView()
+            hud.bgMaskView!.frame = CGRectMake(0, 0, DXScreenSize.width, DXScreenSize.height)
+            hud.bgMaskView!.backgroundColor = UIColor.clearColor()
+            keyWindow.addSubview(hud.bgMaskView!)
+            keyWindow.addSubview(hud)
+            hud.beginAnimation()
+        }
     }
     
     /**
@@ -123,6 +158,10 @@ class DXHUD: UIView {
      */
     class func hiddenHud(hudFlag flag: String)
     {
+        if DXHUDArray.isEmpty
+        {
+            return
+        }
         for hud in DXHUDArray
         {
             if hud.hudFlag == flag
