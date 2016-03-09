@@ -34,18 +34,11 @@ class ViewController: UIViewController {
    //MARK: hud显示时屏幕无法响应点击
     @IBAction func showMaskHud(sender: UIButton) {
         
-        if sender.tag == 3
-        {
-            DXHUD.showHud(remindTitle: "加载中...", flag: "maskTest", confi: { (hud:DXHUD) -> () in
-                
-                hud.arcColor = UIColor.orangeColor()
-                hud.desLabel.textColor = UIColor.orangeColor()
-            })
-        }
-        else if sender.tag == 4
-        {
-             DXHUD.hiddenHud(hudFlag: "maskTest")
-        }
+        DXHUD.showHud(remindTitle: "加载中...", flag: "maskTest", confi: { (hud:DXHUD) -> () in
+            
+            hud.arcColor = UIColor.orangeColor()
+            hud.desLabel.textColor = UIColor.orangeColor()
+        })
     }
     
     override func didReceiveMemoryWarning()
