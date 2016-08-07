@@ -9,14 +9,14 @@
 import UIKit
 
 var DXHUDArray = [DXHUD]()
-let DXScreenSize = UIScreen.mainScreen().bounds.size
+let DXScreenSize = UIScreen.main.bounds.size
 
 class DXHUD: UIView {
     
     //一些常量
     let animationTime:CFTimeInterval = 0.5
     let hiddenHudAnimationTime:CFTimeInterval = 0.5
-    static let defaultArcColor = UIColor.redColor()
+    static let defaultArcColor = UIColor.red
     static let viewCornerRadius:CGFloat = 4.0
     
     //xib上的控件
@@ -29,30 +29,30 @@ class DXHUD: UIView {
     var bgMaskView:UIView?
     
     //圆弧的颜色
-    var arcColor: UIColor = UIColor.orangeColor(){
+    var arcColor: UIColor = UIColor.orange{
     
         willSet(newColor){
             
-            arcLayer.strokeColor = newColor.CGColor
+            arcLayer.strokeColor = newColor.cgColor
         }
     }
     
     class func dxHud() -> (DXHUD)
     {
         //从xib加载view
-        let hud = NSBundle.mainBundle().loadNibNamed("DXHUD", owner: nil, options: nil).first as! DXHUD
-        let centerPoint =  CGPointMake(hud.frame.size.width / 2, hud.frame.size.height / 2)
+        let hud = Bundle.main.loadNibNamed("DXHUD", owner: nil, options: nil)?.first as! DXHUD
+        let centerPoint =  CGPoint(x: hud.frame.size.width / 2, y: hud.frame.size.height / 2)
         hud.layer.cornerRadius = self.viewCornerRadius
         hud.layer.masksToBounds = true
         
         //创建logo上的圆弧
         let arcLayer = hud.arcLayer
         let arcPath = UIBezierPath.init(arcCenter: centerPoint, radius: hud.logoView.frame.size.width / 2 - 1, startAngle: 0, endAngle: CGFloat(M_PI * 2), clockwise: true)
-        arcLayer.path = arcPath.CGPath
+        arcLayer.path = arcPath.cgPath
         arcLayer.lineWidth = 4
         arcLayer.strokeStart = 11 / 16.0
         arcLayer.strokeEnd = 13 / 16.0
-        arcLayer.fillColor = UIColor.clearColor().CGColor
+        arcLayer.fillColor = UIColor.clear.cgColor
         hud.arcColor = defaultArcColor
         hud.frontView.layer.addSublayer(arcLayer)
         return hud
@@ -67,17 +67,17 @@ class DXHUD: UIView {
 //                self.alpha = 1.0
 //        })
         let rotaionAnimation = CABasicAnimation.init(keyPath: "transform")
-        rotaionAnimation.toValue = NSValue.init(CATransform3D: CATransform3DMakeRotation(CGFloat(M_PI - 1), 0, 0, 1))
+        rotaionAnimation.toValue = NSValue.init(caTransform3D: CATransform3DMakeRotation(CGFloat(M_PI - 1), 0, 0, 1))
         rotaionAnimation.duration = self.animationTime
         rotaionAnimation.repeatCount = MAXFLOAT
-        rotaionAnimation.cumulative = true
-        self.frontView.layer.addAnimation(rotaionAnimation, forKey: self.hudFlag)
+        rotaionAnimation.isCumulative = true
+        self.frontView.layer.add(rotaionAnimation, forKey: self.hudFlag)
     }
     
     //MARK: 终止动画 并销毁hud
     func endAnimation()
     {
-        UIView.animateWithDuration(hiddenHudAnimationTime, animations: { () -> Void in
+        UIView.animate(withDuration: hiddenHudAnimationTime, animations: { () -> Void in
             
              self.alpha = 0.0
             
@@ -85,22 +85,22 @@ class DXHUD: UIView {
                 
                 if finish == true
                 {
-                    self.frontView.layer.removeAnimationForKey(self.hudFlag)
+                    self.frontView.layer.removeAnimation(forKey: self.hudFlag)
                     if self.bgMaskView != nil
                     {
                         self.bgMaskView!.removeFromSuperview()
                     }
                     self.removeFromSuperview()
-                    if let index = DXHUDArray.indexOf(self)
+                    if let index = DXHUDArray.index(of: self)
                     {
-                        DXHUDArray.removeAtIndex(index)
+                        DXHUDArray.remove(at: index)
                     }
                 }
         }
     }
 
     //MARK: 关闭按钮被点击
-    @IBAction func closeBtnClicked(sender: UIButton)
+    @IBAction func closeBtnClicked(_ sender: UIButton)
     {
         self.endAnimation()
     }
@@ -130,7 +130,7 @@ class DXHUD: UIView {
     {
         let hud = self.dxHud()
         hud.setUpHud(remindTitle: title, flag: flag, confi: confi)
-        hud.center = CGPointMake(DXScreenSize.width / 2, DXScreenSize.height / 2)
+        hud.center = CGPoint(x: DXScreenSize.width / 2, y: DXScreenSize.height / 2)
         inView.addSubview(hud)
         hud.beginAnimation()
     }
@@ -139,12 +139,12 @@ class DXHUD: UIView {
     {
         let hud = self.dxHud()
         hud.setUpHud(remindTitle: title, flag: flag, confi: confi)
-        hud.center = CGPointMake(DXScreenSize.width / 2, DXScreenSize.height / 2)
-        if let keyWindow = UIApplication.sharedApplication().keyWindow
+        hud.center = CGPoint(x: DXScreenSize.width / 2, y: DXScreenSize.height / 2)
+        if let keyWindow = UIApplication.shared.keyWindow
         {
             hud.bgMaskView = UIView()
-            hud.bgMaskView!.frame = CGRectMake(0, 0, DXScreenSize.width, DXScreenSize.height)
-            hud.bgMaskView!.backgroundColor = UIColor.clearColor()
+            hud.bgMaskView!.frame = CGRect(x: 0, y: 0, width: DXScreenSize.width, height: DXScreenSize.height)
+            hud.bgMaskView!.backgroundColor = UIColor.clear
             keyWindow.addSubview(hud.bgMaskView!)
             keyWindow.addSubview(hud)
             hud.beginAnimation()
