@@ -16,13 +16,13 @@ class ViewController: UIViewController {
     }
     
     //MARK: hud显示时屏幕还可以响应点击
-    @IBAction func beginAnimation(sender: UIButton) {
+    @IBAction func beginAnimation(_ sender: UIButton) {
         
         if sender.tag == 1
         {
             DXHUD.showHud(remindTitle: "加载中...", flag: "test", inView: self.view, confi: { (hud:DXHUD) -> () in
             
-                hud.desLabel.textColor = UIColor.redColor()
+                hud.desLabel.textColor = UIColor.red
            })
         }
         else if sender.tag == 2
@@ -32,12 +32,12 @@ class ViewController: UIViewController {
     }
     
    //MARK: hud显示时屏幕无法响应点击
-    @IBAction func showMaskHud(sender: UIButton) {
+    @IBAction func showMaskHud(_ sender: UIButton) {
         
         DXHUD.showHud(remindTitle: "加载中...", flag: "maskTest", confi: { (hud:DXHUD) -> () in
             
-            hud.arcColor = UIColor.orangeColor()
-            hud.desLabel.textColor = UIColor.orangeColor()
+            hud.arcColor = UIColor.orange
+            hud.desLabel.textColor = UIColor.orange
         })
     }
     
