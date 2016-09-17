@@ -106,14 +106,14 @@ class DXHUD: UIView {
     }
     
     //MARK: 设置hud的样式
-    func setUpHud(remindTitle title:String, flag:String, confi:((hud: DXHUD) -> ())?)
+    func setUpHud(remindTitle title:String, flag:String, confi:((_ hud: DXHUD) -> ())?)
     {
         //self.alpha = 0.0
         self.hudFlag = flag
         self.desLabel.text = title
         if let setHudblock = confi
         {
-            setHudblock(hud: self)
+            setHudblock(self)
         }
         DXHUDArray.append(self)
     }
@@ -126,7 +126,7 @@ class DXHUD: UIView {
      - parameter inView: 要显示hud的view
      - parameter confi:  设置hud的属性(可传空)
      */
-    class func showHud(remindTitle title: String, flag:String, inView:UIView, confi:((hud: DXHUD) -> ())?)
+    class func showHud(remindTitle title: String, flag:String, inView:UIView, confi:((_ hud: DXHUD) -> ())?)
     {
         let hud = self.dxHud()
         hud.setUpHud(remindTitle: title, flag: flag, confi: confi)
@@ -135,7 +135,7 @@ class DXHUD: UIView {
         hud.beginAnimation()
     }
     
-    class func showHud(remindTitle title: String, flag:String, confi:((hud: DXHUD) -> ())?)
+    class func showHud(remindTitle title: String, flag:String, confi:((_ hud: DXHUD) -> ())?)
     {
         let hud = self.dxHud()
         hud.setUpHud(remindTitle: title, flag: flag, confi: confi)
