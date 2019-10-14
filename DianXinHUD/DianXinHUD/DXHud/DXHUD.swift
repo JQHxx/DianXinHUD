@@ -10,6 +10,7 @@ import UIKit
 
 var DXHUDArray = [DXHUD]()
 let DXScreenSize = UIScreen.main.bounds.size
+let M_PAI = Double.pi;
 
 class DXHUD: UIView {
     
@@ -47,7 +48,7 @@ class DXHUD: UIView {
         
         //创建logo上的圆弧
         let arcLayer = hud.arcLayer
-        let arcPath = UIBezierPath.init(arcCenter: centerPoint, radius: hud.logoView.frame.size.width / 2 - 1, startAngle: 0, endAngle: CGFloat(M_PI * 2), clockwise: true)
+        let arcPath = UIBezierPath.init(arcCenter: centerPoint, radius: hud.logoView.frame.size.width / 2 - 1, startAngle: 0, endAngle: CGFloat(M_PAI * 2), clockwise: true)
         arcLayer.path = arcPath.cgPath
         arcLayer.lineWidth = 4
         arcLayer.strokeStart = 11 / 16.0
@@ -62,12 +63,8 @@ class DXHUD: UIView {
     func beginAnimation()
     {
         //FIXME: 显示hud的时候应该加个合适的过渡动画
-//        UIView.animateWithDuration(hiddenHudAnimationTime, animations: { () -> Void in
-//            
-//                self.alpha = 1.0
-//        })
         let rotaionAnimation = CABasicAnimation.init(keyPath: "transform")
-        rotaionAnimation.toValue = NSValue.init(caTransform3D: CATransform3DMakeRotation(CGFloat(M_PI - 1), 0, 0, 1))
+        rotaionAnimation.toValue = NSValue.init(caTransform3D: CATransform3DMakeRotation(CGFloat(M_PAI - 1), 0, 0, 1))
         rotaionAnimation.duration = self.animationTime
         rotaionAnimation.repeatCount = MAXFLOAT
         rotaionAnimation.isCumulative = true
@@ -91,7 +88,7 @@ class DXHUD: UIView {
                         self.bgMaskView!.removeFromSuperview()
                     }
                     self.removeFromSuperview()
-                    if let index = DXHUDArray.index(of: self)
+                    if let index = DXHUDArray.firstIndex(of: self)
                     {
                         DXHUDArray.remove(at: index)
                     }
