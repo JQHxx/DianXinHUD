@@ -15,8 +15,8 @@ let M_PAI = Double.pi;
 class DXHUD: UIView {
     
     //一些常量
-    let animationTime:CFTimeInterval = 0.5
-    let hiddenHudAnimationTime:CFTimeInterval = 0.5
+    let animationTime:CFTimeInterval = 0.3
+    let hiddenHudAnimationTime:CFTimeInterval = 0.3
     static let defaultArcColor = UIColor.red
     static let viewCornerRadius:CGFloat = 4.0
     
@@ -30,28 +30,36 @@ class DXHUD: UIView {
     var bgMaskView:UIView?
     
     //圆弧的颜色
-    var arcColor: UIColor = UIColor.orange{
+    var arcColor: UIColor = UIColor.orange {
     
         willSet(newColor){
-            
             arcLayer.strokeColor = newColor.cgColor
         }
     }
     
-    class func dxHud() -> (DXHUD)
-    {
+    class func dxHud() -> (DXHUD) {
         //从xib加载view
         let hud = Bundle.main.loadNibNamed("DXHUD", owner: nil, options: nil)?.first as! DXHUD
         let centerPoint =  CGPoint(x: hud.frame.size.width / 2, y: hud.frame.size.height / 2)
         hud.layer.cornerRadius = self.viewCornerRadius
         hud.layer.masksToBounds = true
         
+        let defaultArcLayer = CAShapeLayer()
+        let defaultArcPath = UIBezierPath.init(arcCenter: centerPoint, radius: hud.logoView.frame.size.width / 2 - 1, startAngle: 0, endAngle: CGFloat(M_PAI * 2), clockwise: true)
+        defaultArcLayer.path = defaultArcPath.cgPath
+        defaultArcLayer.lineWidth = 3
+        defaultArcLayer.strokeStart = 0 / 16.0
+        defaultArcLayer.strokeEnd = 16 / 16.0
+        defaultArcLayer.fillColor = UIColor.clear.cgColor
+        defaultArcLayer.strokeColor = UIColor.brown.cgColor
+        hud.frontView.layer.addSublayer(defaultArcLayer)
+        
         //创建logo上的圆弧
         let arcLayer = hud.arcLayer
         let arcPath = UIBezierPath.init(arcCenter: centerPoint, radius: hud.logoView.frame.size.width / 2 - 1, startAngle: 0, endAngle: CGFloat(M_PAI * 2), clockwise: true)
         arcLayer.path = arcPath.cgPath
-        arcLayer.lineWidth = 4
-        arcLayer.strokeStart = 11 / 16.0
+        arcLayer.lineWidth = 3
+        arcLayer.strokeStart = 11.5 / 16.0
         arcLayer.strokeEnd = 13 / 16.0
         arcLayer.fillColor = UIColor.clear.cgColor
         hud.arcColor = defaultArcColor
@@ -60,8 +68,7 @@ class DXHUD: UIView {
     }
     
     //MARK: 开始动画
-    func beginAnimation()
-    {
+    func beginAnimation() {
         //FIXME: 显示hud的时候应该加个合适的过渡动画
         let rotaionAnimation = CABasicAnimation.init(keyPath: "transform")
         rotaionAnimation.toValue = NSValue.init(caTransform3D: CATransform3DMakeRotation(CGFloat(M_PAI - 1), 0, 0, 1))
@@ -72,24 +79,20 @@ class DXHUD: UIView {
     }
     
     //MARK: 终止动画 并销毁hud
-    func endAnimation()
-    {
+    func endAnimation() {
         UIView.animate(withDuration: hiddenHudAnimationTime, animations: { () -> Void in
             
              self.alpha = 0.0
             
             }) { (finish: Bool) -> Void in
                 
-                if finish == true
-                {
+                if finish == true {
                     self.frontView.layer.removeAnimation(forKey: self.hudFlag)
-                    if self.bgMaskView != nil
-                    {
+                    if self.bgMaskView != nil {
                         self.bgMaskView!.removeFromSuperview()
                     }
                     self.removeFromSuperview()
-                    if let index = DXHUDArray.firstIndex(of: self)
-                    {
+                    if let index = DXHUDArray.firstIndex(of: self) {
                         DXHUDArray.remove(at: index)
                     }
                 }
@@ -97,19 +100,15 @@ class DXHUD: UIView {
     }
 
     //MARK: 关闭按钮被点击
-    @IBAction func closeBtnClicked(_ sender: UIButton)
-    {
+    @IBAction func closeBtnClicked(_ sender: UIButton) {
         self.endAnimation()
     }
     
     //MARK: 设置hud的样式
-    func setUpHud(remindTitle title:String, flag:String, confi:((_ hud: DXHUD) -> ())?)
-    {
-        //self.alpha = 0.0
+    func setUpHud(remindTitle title:String, flag:String, confi:((_ hud: DXHUD) -> ())?) {
         self.hudFlag = flag
         self.desLabel.text = title
-        if let setHudblock = confi
-        {
+        if let setHudblock = confi {
             setHudblock(self)
         }
         DXHUDArray.append(self)
@@ -123,8 +122,7 @@ class DXHUD: UIView {
      - parameter inView: 要显示hud的view
      - parameter confi:  设置hud的属性(可传空)
      */
-    class func showHud(remindTitle title: String, flag:String, inView:UIView, confi:((_ hud: DXHUD) -> ())?)
-    {
+    class func showHud(remindTitle title: String, flag:String, inView:UIView, confi:((_ hud: DXHUD) -> ())?) {
         let hud = self.dxHud()
         hud.setUpHud(remindTitle: title, flag: flag, confi: confi)
         hud.center = CGPoint(x: DXScreenSize.width / 2, y: DXScreenSize.height / 2)
@@ -132,13 +130,11 @@ class DXHUD: UIView {
         hud.beginAnimation()
     }
     
-    class func showHud(remindTitle title: String, flag:String, confi:((_ hud: DXHUD) -> ())?)
-    {
+    class func showHud(remindTitle title: String, flag:String, confi:((_ hud: DXHUD) -> ())?){
         let hud = self.dxHud()
         hud.setUpHud(remindTitle: title, flag: flag, confi: confi)
         hud.center = CGPoint(x: DXScreenSize.width / 2, y: DXScreenSize.height / 2)
-        if let keyWindow = UIApplication.shared.keyWindow
-        {
+        if let keyWindow = UIApplication.shared.keyWindow {
             hud.bgMaskView = UIView()
             hud.bgMaskView!.frame = CGRect(x: 0, y: 0, width: DXScreenSize.width, height: DXScreenSize.height)
             hud.bgMaskView!.backgroundColor = UIColor.clear
@@ -153,23 +149,18 @@ class DXHUD: UIView {
      
      - parameter hudFlag: hud标记
      */
-    class func hiddenHud(hudFlag flag: String)
-    {
-        if DXHUDArray.isEmpty
-        {
+    class func hiddenHud(hudFlag flag: String) {
+        if DXHUDArray.isEmpty {
             return
         }
-        for hud in DXHUDArray
-        {
-            if hud.hudFlag == flag
-            {
+        for hud in DXHUDArray {
+            if hud.hudFlag == flag {
                 hud.endAnimation()
             }
         }
     }
     
-     deinit
-    {
+     deinit {
         print("标记为\(hudFlag)的hud被释放了.....")
     }
 }
